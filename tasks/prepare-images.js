@@ -28,7 +28,8 @@
 
 module.exports = function(grunt) {
 
-    var fs   = require('fs'),
+    var _    = grunt.util._,
+        fs   = require('fs'),
         gm   = require('gm'),
         path = require('path'),
         fsX  = require('node-fs');
