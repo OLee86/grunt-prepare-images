@@ -1,0 +1,20 @@
+{
+  "name": "grunt-prepare-images",
+  "description": "convert images smaller than defined file size to dataurls, create stylus var definitions out of all images and create stylus group files by directories in the image folder",
+
+  "author": {
+    "name" : "Oliver Liermann",
+    "email": "liermann@strg-agency.de"
+  },
+
+  "main": "tasks/prepare-images.js",
+  "version": "0.1.0",
+
+  "dependencies": {
+        "grunt"  : "~0.4.1",
+        "node-fs": "https://github.com/bpedro/node-fs/tarball/master",
+        "gm"     : "https://github.com/aheckmann/gm/tarball/master"
+    },
+
+  "readmeFilename": "README.md"
+}
