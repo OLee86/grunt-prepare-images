@@ -161,7 +161,8 @@ module.exports = function(grunt) {
                             if(!err && size){
                                 image.size = size;
                             }else{
-                                grunt.log.error('Could not retrieve image size: ',image.file,err);
+                                grunt.log.error('Could not retrieve image size: ',image.file);
+                                grunt.log.error(err+'');
                             }
                             approvedImages.push(image);
                             after();
@@ -299,9 +300,8 @@ module.exports = function(grunt) {
                         var currDepth = image.subGroups.length,
                             data = [
                                 '&.'+image.name,
-                                (image.size ?
-                                    tab+'width '+image.size.width+'px'+
-                                    tab+'height '+image.size.height+'px' : ''),
+                                (image.size ? tab+'width '+image.size.width+'px' : ''),
+                                (image.size ? tab+'height '+image.size.height+'px' : ''),
                                 tab+'background-image '+image.alias+'\n\n'
                             ];
 
