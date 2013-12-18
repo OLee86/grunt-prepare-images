@@ -161,7 +161,7 @@ module.exports = function(grunt) {
                             if(!err && size){
                                 image.size = size;
                             }else{
-                                grunt.error('Could not retrieve image size: ',image.file,err);
+                                grunt.log.error('Could not retrieve image size: ',image.file,err);
                             }
                             approvedImages.push(image);
                             after();
@@ -264,7 +264,7 @@ module.exports = function(grunt) {
                         writeFile = function(filepath,data){
                             fs.writeFile(filepath, data, function(err){
                                 if(err){
-                                    grunt.error('could not save file '+groupFilePath);
+                                    grunt.log.error('Could not save file: '+groupFilePath);
                                 }else{
                                     finished();
                                 }
