@@ -103,17 +103,29 @@ module.exports = function(grunt) {
                 grunt.verbose.write('retrieve additonal information...');
 
                 var after = _.after(images.length,function(){
-                        _.each(images,function(image,key){
+                        if(ignoredImages.length){
+                            var ignored = _.map(ignoredImages,function(image){
+                                    return image.file;
+                                });
+
+                            console.log('ignoring: '+ignored.join(', '));
+                        }
+
+                        _.each(approvedImages,function(image,key){
                             image.aliasLength = aliasLength[image.group] || 0;
                         });
-                        images = _.sortBy(images,'group');
+                        approvedImages = _.sortBy(approvedImages,'group');
 
                         grunt.verbose.ok();
 
                         if(_.isFunction(callback)){
-                            callback(images);
+                            callback(approvedImages);
                         }
                     }),
+
+                    ignoredImages = [],
+
+                    approvedImages = [],
 
                     aliasLength = {};
 
@@ -121,6 +133,7 @@ module.exports = function(grunt) {
                     var ext = path.extname(image.file).replace('.','');
 
                     if(!_.str.startsWith(image.file,'.') && !_.str.startsWith(image.file,'_') && _.indexOf(fileTypes,ext) > -1){
+
                         var imageBuffer = fs.readFileSync(basePath+image.path+image.file),
                             nestedGroups = _.rtrim(image.path,'/','').split('/');
 
@@ -148,12 +161,13 @@ module.exports = function(grunt) {
                             if(!err && size){
                                 image.size = size;
                             }
+                            approvedImages.push(image);
                             after();
                         });
 
 
                     }else{
-                        console.log('ignoring: '+image);
+                        ignoredImages.push(image);
                         after();
                     }
                 });
@@ -176,7 +190,7 @@ module.exports = function(grunt) {
 
 
             // output alias & data-url/filepath
-            generateAliasFile  = function(images,file,basePath,callback){
+            generateAliasFile = function(images,file,basePath,callback){
                 grunt.verbose.write('create stylus variables file...');
 
                 var aliasFile = fs.createWriteStream(file);
