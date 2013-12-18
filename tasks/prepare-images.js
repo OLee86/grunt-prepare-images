@@ -108,7 +108,7 @@ module.exports = function(grunt) {
                                     return image.file;
                                 });
 
-                            console.log('ignoring: '+ignored.join(', '));
+                            grunt.log.writeln('ignoring: '+ignored.join(', '));
                         }
 
                         _.each(approvedImages,function(image,key){
@@ -160,6 +160,8 @@ module.exports = function(grunt) {
                         gm(imageBuffer).size(function(err, size){
                             if(!err && size){
                                 image.size = size;
+                            }else{
+                                grunt.error('Could not retrieve image size: ',image.file,err);
                             }
                             approvedImages.push(image);
                             after();
@@ -207,7 +209,7 @@ module.exports = function(grunt) {
 
                         // write one line
                         aliasFile.write(_.sprintf("/* %s */ %s = url('%s')\n",
-                            _.rpad(image.size.width+'x'+image.size.height,7,' '),
+                            image.size ? _.rpad(image.size.width+'x'+image.size.height,7,' ') : '-',
                             _.rpad(image.alias,image.aliasLength,' '),
                             image.dataUrl || basePath+image.path+image.file
                         ));
@@ -297,8 +299,9 @@ module.exports = function(grunt) {
                         var currDepth = image.subGroups.length,
                             data = [
                                 '&.'+image.name,
-                                tab+'width '+image.size.width+'px',
-                                tab+'height '+image.size.height+'px',
+                                (image.size ?
+                                    tab+'width '+image.size.width+'px'+
+                                    tab+'height '+image.size.height+'px' : ''),
                                 tab+'background-image '+image.alias+'\n\n'
                             ];
 
